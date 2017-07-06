@@ -26,13 +26,12 @@ output = r.TFile(options.output + '.root', 'RECREATE')
 numInputs = len(inputs)
 for vfat in range(24):
   # Create the comparison
-  canvas = r.TCanvas('lat-vfat%d' % vfat, 'canv', numInputs * 1000, 1000)
-  canvas.Divide(numInputs)
+  canvas = r.TCanvas('canvas-lat-vfat%d' % vfat, '', 1000, 1000)
+  canvas.cd()
   for i in range(numInputs):
-    canvas.cd(i + 1)
     plot = inputs[i].Get('lat%d_ga' % vfat)
-    plot.SetTitle(options.inputs[i])
-    plot.Draw()
+    plot.SetTitle('NHits(latency) for vfat %d' % vfat)
+    plot.Draw('' if i == 0 else 'same')
   # Write to ROOT file
   output.cd()
   canvas.Write()
