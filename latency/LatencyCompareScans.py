@@ -20,6 +20,9 @@ options = parser.parse_args()
 
 r.gROOT.SetBatch()
 
+swatch = [ r.kBlue, r.kGreen, r.kMagenta, r.kCyan, r.kOrange,
+           r.kSpring, r.kTeal, r.kAzure, r.kViolet, r.kPink ]
+
 inputs = [ r.TFile(filename) for filename in options.inputs ]
 output = r.TFile(options.output + '.root', 'RECREATE')
 
@@ -31,6 +34,8 @@ for vfat in range(24):
   for i in range(numInputs):
     plot = inputs[i].Get('lat%d_ga' % vfat)
     plot.SetTitle('NHits(latency) for vfat %d' % vfat)
+    plot.SetLineColor(swatch[i % len(swatch)])
+    plot.GetYaxis().SetRangeUser(-0.05, 0.5)
     plot.Draw('' if i == 0 else 'same')
   # Write to ROOT file
   output.cd()
