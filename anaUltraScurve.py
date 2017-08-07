@@ -128,10 +128,8 @@ if options.SaveFile:
 vSummaryPlots = ndict()
 vSummaryPlotsPanPin2 = ndict()
 vSummaryPlotsPruned = ndict()
-vSumHot    = ndict()
-vSumNotHot = ndict()
-
 vSummaryPlotsPrunedPanPin2 = ndict()
+vTrimValueVsZscore = ndict()
 vScurves = []
 vthr_list = []
 trim_list = []
@@ -166,6 +164,7 @@ for vfat in range(0,24):
     vthr_list.append([])
     trim_list.append([])
     trimrange_list.append([])
+    vTrimValueVsZscore[vfat] = r.TH2D('vTrimValueVsZscore%i'%vfat, 'VFAT %i;z-score;VCal-zscore*sigma [fC]'%vfat,100,0,10,256,vToQm*-0.5+vToQb,vToQm*255.5+vToQb)
     if options.IsTrimmed:
         lines.append(r.TLine(-0.5, trimVcal[vfat], 127.5, trimVcal[vfat]))
         pass
@@ -175,8 +174,6 @@ for vfat in range(0,24):
         vSummaryPlotsPruned[vfat] = r.TH2D('vSummaryPlotsPruned%i'%vfat,'VFAT %i;Strip;VCal [fC]'%vfat,128,-0.5,127.5,256,vToQm*-0.5+vToQb,vToQm*255.5+vToQb)
         vSummaryPlotsPruned[vfat].GetYaxis().SetTitleOffset(1.5)
         pass
-    vSumHot[vfat] = r.TH2D('vSumHot%i'%vfat,'VFAT %i;z-score;VCal [fC]'%vfat,100,0.05,10.05,256,vToQm*-0.5+vToQb,vToQm*255.5+vToQb)
-    vSumNotHot[vfat] = r.TH2D('vSumNotHot%i'%vfat,'VFAT %i;z-score;VCal [fC]'%vfat,100,0.05,10.05,256,vToQm*-0.5+vToQb,vToQm*255.5+vToQb)
     if options.channels:
         vSummaryPlots[vfat] = r.TH2D('vSummaryPlots%i'%vfat,'VFAT %i;Channels;VCal [fC]'%vfat,128,-0.5,127.5,256,vToQm*-0.5+vToQb,vToQm*255.5+vToQb)
         vSummaryPlots[vfat].GetYaxis().SetTitleOffset(1.5)
@@ -247,6 +244,7 @@ if options.SaveFile:
     hotZScore = []
     for vfat in range(0, 24):
         trimValue = np.zeros(128)
+        thresholds = np.zeros(128)
         fitFailed = np.zeros(128, dtype=bool)
         for ch in range(0, 128):
             # Get fit results
@@ -258,12 +256,12 @@ if options.SaveFile:
             pass
         fitFailed = np.logical_not(fitter.fitValid[vfat])
         # Determine outliers
-        hotZScore.append(np.zeros(128))
+        hotZScore = np.zeros(128)
         hot = np.zeros(128, dtype=bool)
         for zscore in range(100, 0, -1):
             newHot = isOutlierMADOneSided(trimValue, thresh=zscore / 10.,
                                           rejectHighTail=False)
-            hotZScore[vfat][newHot & np.logical_not(hot)] = zscore / 10.
+            hotZScore[newHot & np.logical_not(hot)] = zscore / 10.
             hot = newHot
 
         masks.append(fitFailed | hot | fitter.isDead[vfat])
@@ -277,18 +275,12 @@ if options.SaveFile:
                 np.count_nonzero(fitter.isDead[vfat]),
                 np.count_nonzero(hot),
                 np.count_nonzero(fitFailed))
+        for ch in range(128):
+          vTrimValueVsZscore[vfat].Fill(hotZScore[ch], vToQm*thresholds[ch]+vToQb)
 
 # Fill pruned
 if options.SaveFile:
     for event in inF.scurveTree:
-    if masks[event.vfatN][event.vfatCH] & 0x02 or masks[event.vfatN][event.vfatCH] & 0x04:
-        continue
-    for zscore in range(100, 0, -1):
-        if zscore < 10.*hotZScore[event.vfatN][event.vfatCH]:
-            vSumHot[event.vfatN].Fill(zscore/10.,vToQm*event.vcal+vToQb,event.Nhits)
-        else:
-            vSumNotHot[event.vfatN].Fill(zscore/10.,vToQm*event.vcal+vToQb,event.Nhits)
-
         if masks[event.vfatN][event.vfatCH]:
             continue
         strip = chanToStripLUT[event.vfatN][event.vfatCH]
@@ -417,8 +409,8 @@ def saveSummary(vSummaryPlots, vSummaryPlotsPanPin2, name='Summary'):
 saveSummary(vSummaryPlots, vSummaryPlotsPanPin2)
 if options.SaveFile:
     saveSummary(vSummaryPlotsPruned, vSummaryPlotsPrunedPanPin2, name='PrunedSummary')
-    saveSummary(vSumHot, None, name='HotSummary')
-    saveSummary(vSumNotHot, None, name='NotHotSummary')
+    canv = make3x8Canvas('canv', vTrimValueVsZscore, 'colz')
+    canv.SaveAs(filename+'/trimValueVsZscoreSummary.png')
 
 if options.SaveFile:
     r.gStyle.SetOptStat(0)
@@ -438,8 +430,7 @@ if options.SaveFile:
     outF.cd()
     for vfat in fitSums.keys():
         fitSums[vfat].Write()
-        vSumHot[vfat].Write()
-        vSumNotHot[vfat].Write()
+        vTrimValueVsZscore[vfat].Write()
         pass
     myT.Write()
     outF.Close()
