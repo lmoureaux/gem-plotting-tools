@@ -129,7 +129,7 @@ vSummaryPlots = ndict()
 vSummaryPlotsPanPin2 = ndict()
 vSummaryPlotsPruned = ndict()
 vSummaryPlotsPrunedPanPin2 = ndict()
-vTrimValueVsZscore = ndict()
+vTrimValueVsZtrim = ndict()
 vScurves = []
 vthr_list = []
 trim_list = []
@@ -164,7 +164,7 @@ for vfat in range(0,24):
     vthr_list.append([])
     trim_list.append([])
     trimrange_list.append([])
-    vTrimValueVsZscore[vfat] = r.TH2D('vTrimValueVsZscore%i'%vfat, 'VFAT %i;z-score;VCal-zscore*sigma [fC]'%vfat,100,0,10,256,vToQm*-0.5+vToQb,vToQm*255.5+vToQb)
+    vTrimValueVsZtrim[vfat] = r.TH2D('vTrimValueVsZtrim%i'%vfat, 'VFAT %i;zTrim;VCal-zscore*sigma [fC]'%vfat,100,0.005,10.005,256,vToQm*-0.5+vToQb,vToQm*255.5+vToQb)
     if options.IsTrimmed:
         lines.append(r.TLine(-0.5, trimVcal[vfat], 127.5, trimVcal[vfat]))
         pass
@@ -276,7 +276,8 @@ if options.SaveFile:
                 np.count_nonzero(hot),
                 np.count_nonzero(fitFailed))
         for ch in range(128):
-          vTrimValueVsZscore[vfat].Fill(hotZScore[ch], vToQm*thresholds[ch]+vToQb)
+          if not fitFailed[ch] and not fitter.isDead[vfat][ch]:
+            vTrimValueVsZtrim[vfat].Fill(hotZScore[ch], vToQm*thresholds[ch]+vToQb)
 
 # Fill pruned
 if options.SaveFile:
@@ -409,8 +410,8 @@ def saveSummary(vSummaryPlots, vSummaryPlotsPanPin2, name='Summary'):
 saveSummary(vSummaryPlots, vSummaryPlotsPanPin2)
 if options.SaveFile:
     saveSummary(vSummaryPlotsPruned, vSummaryPlotsPrunedPanPin2, name='PrunedSummary')
-    canv = make3x8Canvas('canv', vTrimValueVsZscore, 'colz')
-    canv.SaveAs(filename+'/trimValueVsZscoreSummary.png')
+    canv = make3x8Canvas('canv', vTrimValueVsZtrim, 'colz')
+    canv.SaveAs(filename+'/trimValueVsZtrimSummary.png')
 
 if options.SaveFile:
     r.gStyle.SetOptStat(0)
@@ -430,7 +431,7 @@ if options.SaveFile:
     outF.cd()
     for vfat in fitSums.keys():
         fitSums[vfat].Write()
-        vTrimValueVsZscore[vfat].Write()
+        vTrimValueVsZtrim[vfat].Write()
         pass
     myT.Write()
     outF.Close()
