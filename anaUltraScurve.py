@@ -244,7 +244,6 @@ if options.SaveFile:
     hotZScore = []
     for vfat in range(0, 24):
         trimValue = np.zeros(128)
-        thresholds = np.zeros(128)
         fitFailed = np.zeros(128, dtype=bool)
         for ch in range(0, 128):
             # Get fit results
@@ -277,7 +276,7 @@ if options.SaveFile:
                 np.count_nonzero(fitFailed))
         for ch in range(128):
             if not fitFailed[ch] and not fitter.isDead[vfat][ch]:
-                vTrimValueVsZtrim[vfat].Fill(hotZScore[ch], vToQm*thresholds[ch]+vToQb)
+                vTrimValueVsZtrim[vfat].Fill(hotZScore[ch], vToQm*trimValue[ch]+vToQb)
 
 # Fill pruned
 if options.SaveFile:
