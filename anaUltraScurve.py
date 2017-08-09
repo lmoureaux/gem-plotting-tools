@@ -276,8 +276,8 @@ if options.SaveFile:
                 np.count_nonzero(hot),
                 np.count_nonzero(fitFailed))
         for ch in range(128):
-          if not fitFailed[ch] and not fitter.isDead[vfat][ch]:
-            vTrimValueVsZtrim[vfat].Fill(hotZScore[ch], vToQm*thresholds[ch]+vToQb)
+            if not fitFailed[ch] and not fitter.isDead[vfat][ch]:
+                vTrimValueVsZtrim[vfat].Fill(hotZScore[ch], vToQm*thresholds[ch]+vToQb)
 
 # Fill pruned
 if options.SaveFile:
