@@ -164,7 +164,7 @@ for vfat in range(0,24):
     vthr_list.append([])
     trim_list.append([])
     trimrange_list.append([])
-    vTrimValueVsZtrim[vfat] = r.TH2D('vTrimValueVsZtrim%i'%vfat, 'VFAT %i;z-score transition;mu-zscore*sigma [fC]'%vfat,100,0.005,10.005,256,vToQm*-0.5+vToQb,vToQm*255.5+vToQb)
+    vTrimValueVsZtrim[vfat] = r.TH2D('vTrimValueVsZtrim%i'%vfat, 'VFAT %i;z-score transition;mu-zscore*sigma [fC]'%vfat,100,0.05,10.05,256,vToQm*-0.5+vToQb,vToQm*255.5+vToQb)
     if options.IsTrimmed:
         lines.append(r.TLine(-0.5, trimVcal[vfat], 127.5, trimVcal[vfat]))
         pass
