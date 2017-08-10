@@ -1,3 +1,7 @@
+# Channel maps
+setup/longChannelMap.txt
+setup/shortChannelMap.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
