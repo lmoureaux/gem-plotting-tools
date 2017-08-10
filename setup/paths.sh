@@ -39,10 +39,9 @@ fi
 
 # Making detector channel maps
 echo "Checking Detector Channel Maps"
-cd $BUILD_HOME/gem-plotting-tools/setup
-if [ ! -f longChannelMap.txt ]; then
+if [ ! -f "$BUILD_HOME/gem-plotting-tools/setup/longChannelMap.txt" ]; then
 	echo "No channel maps found, making"
-	python buildMapFiles.py 
+	python "$BUILD_HOME/gem-plotting-tools/setup/buildMapFiles.py"
 fi
 
 # Appending to path
