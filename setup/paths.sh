@@ -49,26 +49,20 @@ fi
 #export PYTHONPATH=$PYTHONPATH:/lib
 
 # Adding Scan Applications to Path
-#cd $BUILD_HOME/cmsgemos/gempython/tools
-#export PYTHONPATH=$PYTHONPATH:$PWD
+#export "PYTHONPATH=$PYTHONPATH:$BUILD_HOME/cmsgemos/gempython/tools"
 
-cd $BUILD_HOME/vfatqc-python-scripts
-export PYTHONPATH=$PYTHONPATH:$PWD
+export "PYTHONPATH=$PYTHONPATH:$BUILD_HOME/vfatqc-python-scripts"
 
-cd $BUILD_HOME/gem-plotting-tools
-export PATH=$PATH:$PWD
-export PYTHONPATH=$PYTHONPATH:$PWD
+export "PATH=$PATH:$BUILD_HOME/gem-plotting-tools"
+export "PYTHONPATH=$PYTHONPATH:$BUILD_HOME/gem-plotting-tools"
 
-cd $BUILD_HOME/gem-plotting-tools/macros
-export PATH=$PATH:$PWD
-export PYTHONPATH=$PYTHONPATH:$PWD
+export "PATH=$PATH:$BUILD_HOME/gem-plotting-tools/macros"
+export "PYTHONPATH=$PYTHONPATH:$BUILD_HOME/gem-plotting-tools/macros"
 
-cd $BUILD_HOME/gem-plotting-tools/setup
-export PATH=$PATH:$PWD
-export PYTHONPATH=$PYTHONPATH:$PWD
+export "PATH=$PATH:$BUILD_HOME/gem-plotting-tools/setup"
+export "PYTHONPATH=$PYTHONPATH:$BUILD_HOME/gem-plotting-tools/setup"
 
 # Done
-cd $BUILD_HOME/gem-plotting-tools
 export GEM_PLOTTING_PROJECT=$PWD
 echo GEM_PLOTTING_PROJECT $GEM_PLOTTING_PROJECT
 echo "Setup Complete"
