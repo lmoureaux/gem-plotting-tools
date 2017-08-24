@@ -25,3 +25,6 @@
 !.travis.yml
 !.travis/*.py
 !.travis/*.sh
+!.travis/
+!.travis/data/
+!.travis/data/travis/

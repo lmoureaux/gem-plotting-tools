@@ -17,4 +17,5 @@ before_script:
     - cp .travis/chamberInfo.py mapping/chamberInfo.py
     - source .travis/setupenv.sh
 
-script: true
+script:
+    - ana_scans.py --scandate=current --anatype=scurve
