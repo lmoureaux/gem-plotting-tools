@@ -1,4 +1,4 @@
-#!/bin/env python
+#! /usr/bin/env python
 """
 @author: Cameron Bravo (c.bravo@cern.ch)
          Brian Dorney (brian.l.dorney@cern.ch)
