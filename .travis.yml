@@ -13,6 +13,8 @@ addons:
 
 before_script:
     - .travis/install_cmsgemos.sh
+    # Copy Travis chamber info
+    - cp .travis/chamberInfo.py mapping/chamberInfo.py
     - source .travis/setupenv.sh
 
 script: true

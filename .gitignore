@@ -23,4 +23,5 @@
 
 #Don't ignore Travis files
 !.travis.yml
+!.travis/*.py
 !.travis/*.sh

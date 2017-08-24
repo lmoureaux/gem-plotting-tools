@@ -6,7 +6,7 @@ mkdir gemdata
 mkdir gemelog
 
 export BUILD_HOME="$TRAVIS_BUILD_DIR/.."
-export DATA_PATH="$BUILD_HOME/gemdata"
+export DATA_PATH="$TRAVIS_BUILD_DIR/.travis/data"
 export ELOG_PATH="$BUILD_HOME/gemelog"
 
 cd "$BUILD_HOME"
