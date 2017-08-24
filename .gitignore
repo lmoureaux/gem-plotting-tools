@@ -23,3 +23,4 @@
 
 #Don't ignore Travis files
 !.travis.yml
+!.travis/*.sh

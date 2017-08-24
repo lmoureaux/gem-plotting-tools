@@ -11,4 +11,7 @@ addons:
         - libroot-*-dev
         - libroot-bindings-python5.34
 
+before_script:
+    - .travis/install_cmsgemos.sh
+
 script: true
