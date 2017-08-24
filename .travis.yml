@@ -13,5 +13,6 @@ addons:
 
 before_script:
     - .travis/install_cmsgemos.sh
+    - source .travis/setupenv.sh
 
 script: true
