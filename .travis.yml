@@ -1,0 +1,16 @@
+# Travis CI config file
+language: python
+python:
+    - "2.6"
+    - "2.7"
+
+addons:
+    apt:
+        packages:
+        - root-system
+        - libroot-*-dev
+        - libroot-bindings-python5.34
+
+before_install: ls /usr/include/root | grep TDirectoryFile
+install: true
+script: true
