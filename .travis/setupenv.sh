@@ -2,7 +2,9 @@
 
 # Script to setup data paths
 
-mkdir gemdata
+# For Ubuntu 14.04: add pyroot to PYTHON_PATH
+export PYTHONPATH="/usr/share/python-support/root:/usr/lib/python2.7/dist-packages/"
+
 mkdir gemelog
 
 export BUILD_HOME="$TRAVIS_BUILD_DIR/.."
