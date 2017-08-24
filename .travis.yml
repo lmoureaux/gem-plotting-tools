@@ -8,6 +8,7 @@ addons:
     apt:
         packages:
         - root-system
+        - root-plugin-hist-*
         - libroot-*-dev
         - libroot-bindings-python5.34
 
