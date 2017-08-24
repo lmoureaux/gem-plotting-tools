@@ -11,6 +11,4 @@ addons:
         - libroot-*-dev
         - libroot-bindings-python5.34
 
-before_install: ls /usr/include/root | grep TDirectoryFile
-install: true
 script: true
