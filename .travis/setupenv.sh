@@ -10,8 +10,6 @@ export ELOG_PATH="$BUILD_HOME/gemelog"
 
 cd "$BUILD_HOME"
 
-echo "====== ROOT"
-. root/bin/thisroot.sh
 echo "====== cmsgemos"
 . cmsgemos/setup/paths.sh
 echo "====== gem-plotting-tools"

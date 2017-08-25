@@ -7,7 +7,7 @@ python:
 cache: ../root
 
 before_install:
-    - .travis/install_root.sh
+    - source .travis/install_root.sh
 
 before_script:
     - .travis/install_cmsgemos.sh
