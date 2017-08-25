@@ -6,7 +6,7 @@ import testutils as tu
 
 tu.testCommand(['ana_scans.py', '--scandate=current', '--anaType=scurve'])
 
-outputDir = '.travis/data/travis/scurve/current/SCurveData/'
+outputDir = 'travis/scurve/current/SCurveData/'
 tu.testFile(outputDir + 'Summary.png')
 tu.testFile(outputDir + 'PrunedSummary.png')
 tu.testFile(outputDir + 'fitSummary.png')

@@ -15,6 +15,7 @@ before_script:
     # Copy Travis chamber info
     - cp .travis/chamberInfo.py mapping/chamberInfo.py
     - source .travis/setupenv.sh
+    - cd "$DATA_PATH"
 
 script:
     - test_scurve.py
