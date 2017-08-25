@@ -17,4 +17,4 @@ before_script:
     - source .travis/setupenv.sh
 
 script:
-    - ana_scans.py --scandate=current --anaType=scurve
+    - .travis/test_scurve.py
