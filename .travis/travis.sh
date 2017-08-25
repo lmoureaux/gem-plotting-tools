@@ -1,6 +1,7 @@
 #! /usr/bin/env bash
 
 set -e
+set -v
 
 # Version of CentOS/RHEL
 el_version=$1
