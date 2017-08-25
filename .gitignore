@@ -25,6 +25,8 @@
 !.travis.yml
 !.travis/*.py
 !.travis/*.sh
-!.travis/
 !.travis/data/
 !.travis/data/travis/
+!.travis/data/travis/scurve/
+!.travis/data/travis/scurve/current/
+!.travis/data/travis/scurve/current/SCurveData.root
