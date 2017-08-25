@@ -6,8 +6,10 @@ python:
 
 cache: ../root
 
-before_script:
+before_install:
     - .travis/install_root.sh
+
+before_script:
     - .travis/install_cmsgemos.sh
     # Copy Travis chamber info
     - cp .travis/chamberInfo.py mapping/chamberInfo.py
