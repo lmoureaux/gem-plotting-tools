@@ -2,9 +2,6 @@
 
 # Script to setup data paths
 
-# For Ubuntu 14.04: add pyroot to PYTHON_PATH
-export PYTHONPATH="/usr/share/python-support/root:/usr/lib/python2.7/dist-packages/"
-
 mkdir gemelog
 
 export BUILD_HOME="$TRAVIS_BUILD_DIR/.."
@@ -13,6 +10,8 @@ export ELOG_PATH="$BUILD_HOME/gemelog"
 
 cd "$BUILD_HOME"
 
+echo "====== ROOT"
+. root/bin/thisroot.sh
 echo "====== cmsgemos"
 . cmsgemos/setup/paths.sh
 echo "====== gem-plotting-tools"
