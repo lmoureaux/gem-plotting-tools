@@ -1,22 +1,24 @@
 # Travis CI config file
-language: python
-python:
-    - "2.6"
-    - "2.7"
+sudo: required
 
-addons:
-    apt:
-        packages:
-        - root-system
-        - root-plugin-hist-*
-        - libroot-*-dev
-        - libroot-bindings-python5.34
+language: cpp
 
-before_script:
-    - .travis/install_cmsgemos.sh
-    # Copy Travis chamber info
-    - cp .travis/chamberInfo.py mapping/chamberInfo.py
-    - source .travis/setupenv.sh
+env:
+    matrix:
+        - OS_TYPE=centos OS_VERSION=6 DOCKER_IMAGE=gitlab-registry.cern.ch/sturdy/gemdaq_ci_worker:slc6
+#       - OS_TYPE=centos OS_VERSION=7 DOCKER_IMAGE=gitlab-registry.cern.ch/sturdy/gemdaq_ci_worker:cc7
+
+services:
+    - docker
+
+
+before_install:
+    - sudo apt-get update
+    - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
+    - sudo service docker restart
+    - sleep 1
+    - docker pull $DOCKER_IMAGE
+    - docker ps -al
 
 script:
-    - ana_scans.py --scandate=current --anaType=scurve
+    - .travis/travis.sh ${OS_VERSION}
