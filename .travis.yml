@@ -17,4 +17,4 @@ before_script:
     - source .travis/setupenv.sh
 
 script:
-    - .travis/test_scurve.py
+    - test_scurve.py

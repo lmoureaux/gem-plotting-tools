@@ -15,5 +15,8 @@ echo "====== cmsgemos"
 echo "====== gem-plotting-tools"
 . gem-plotting-tools/setup/paths.sh
 
+# Add test scripts to path
+export PATH="$PATH:$TRAVIS_BUILD_DIR/.travis/"
+
 # Finished
 echo "GEM DAQ Environment Configured"
