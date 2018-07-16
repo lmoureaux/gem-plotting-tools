@@ -23,6 +23,10 @@ Mandatory arguments
 
     Specify the input file. It must be in a specific ``csv`` format; check the
     dedicated section for details.
+
+.. option:: -o,--output <FILE>
+
+    Specify the output file.
 """
 
 if __name__ == '__main__':
@@ -32,10 +36,17 @@ if __name__ == '__main__':
     parser = OptionParser()
     parser.add_option('-i', '--input', type=str, dest='input',
                       help='Specify the input file', metavar='input')
+    parser.add_option('-o', '--output', type=str, dest='output',
+                      help='Specify the output file', metavar='output')
     (options, args) = parser.parse_args()
 
     if options.input is None:
         print('Error: The -i option is required')
+        import sys
+        sys.exit(1)
+
+    if options.output is None:
+        print('Error: The -o option is required')
         import sys
         sys.exit(1)
 
@@ -165,3 +176,14 @@ if __name__ == '__main__':
                 pass
             pass
         pass
+
+    # Write map file
+    with open(options.output, 'w') as out:
+        out.write('vfat/I:strip/I:channel/I:PanPin/I\n')
+        for vfat in range(24):
+            for channel in range(128):
+                out.write('%d\t%d\t%d\t%d\n' % (
+                    vfat,
+                    mapping['Strip'][vfat][channel],
+                    channel,
+                    mapping['PanPin'][vfat][channel]))
