@@ -32,6 +32,9 @@
 !setup/createVirtualEnvPy27.sh
 !setup/paths.sh
 
+# Don't ignore channel maps
+!mapping/channel-map-*.txt
+
 # Don't ignore build config directory
 !config
 
