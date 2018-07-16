@@ -238,6 +238,8 @@ latex_documents = [
 man_pages = [
     ('index', 'gemplotting', u'gemplotting Documentation',
      authors, 1),
+    ('man/importChannelMap', 'importChannelMap.py', u'Import channel maps',
+     authors, 1),
     ('man/gemPlotter', 'gemPlotter.py', u'Plot time evolution of scan results',
      authors, 1),
     ('man/gemTreeDrawWrapper', 'gemTreeDrawWrapper.py', u'Make X-Y plots for each scan date',

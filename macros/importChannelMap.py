@@ -7,12 +7,16 @@ r"""
 Synopsis
 --------
 
-**importChannelMap.py** :token:`-i` <*INPUT FILE*>
+**importChannelMap.py** :token:`-i` <*INPUT FILE*> :token:`-o` <*OUTPUT FILE*>
 
 Description
 -----------
 
-TODO
+Imports channel maps for use within the framework. The input format is close to
+what the electronics team provides, but still requires manual intervention.
+
+The script checks the consistency of the input file and generated mapping. It is
+silent if everything is fine.
 
 Mandatory arguments
 -------------------
@@ -27,6 +31,51 @@ Mandatory arguments
 .. option:: -o,--output <FILE>
 
     Specify the output file.
+
+Input format
+------------
+
+The input file should be in ``csv`` format. It has to be created manually from
+the documentation provided by the electronics team, e.g. `this EDMS document
+<https://edms.cern.ch/ui/#!master/navigator/document?P:1115513923:100178398:subDocs>`_.
+The procedure is as follows:
+
+1. Edit the ``xlsx`` file to contain only the required information:
+    1. Unmerge merged cells
+    2. Remove all metadata and drawings, except column headers in the row with
+       the hybrid positions
+    3. Make sure that there's no empty line
+    4. Remove the ``IN`` prefix from the "VFAT CHANNEL NUMBERS" column. In
+       LibreOffice, the easiest way is as follows:
+
+       * Open the search and replace dialog (``Ctrl+H``)
+       * Check the "Regular expressions" box (under "Other options")
+       * Enter ``IN([0-9]+)`` in the "Search" box
+       * Enter ``$1`` in the "Replace with" box
+       * Hit the "Replace all" button.
+
+   Your sheet should now look like this:
+
+    ==================================================  ====================  ======================================================  =========================
+    130 Pins PANASONIC CONNECTOR PIN OUTS AXK5SA3277YG  VFAT CHANNEL NUMBERS  Hybrid Positions 2,3,4,5,6,7,8,9,10,11, 12, 13, 14, 15  Hybrid Positions    00,01
+    ==================================================  ====================  ======================================================  =========================
+    3                                                   0                     0                                                       63
+    5                                                   1                     1                                                       62
+    7                                                   4                     2                                                       61
+    ==================================================  ====================  ======================================================  =========================
+
+2. Export the relevant sheet to ``csv``. In LibreOffice, this is done by using
+   the "Save As..." entry of the "File" menu while the sheet is selected, and
+   selecting the appropriate format.
+3. Check that the ``csv`` file corresponds to the sheet you exported, has the
+   required headers and no spurious columns. This can be done from within your
+   spreadsheet software.
+
+Exit codes
+----------
+
+1. Wrong usage
+2. A consistency check failed
 """
 
 if __name__ == '__main__':

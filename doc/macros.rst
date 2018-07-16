@@ -46,6 +46,7 @@ Macros
     :maxdepth: 1
 
     man/gemTreeDrawWrapper
+    man/importChannelMap
     man/packageFiles4Docker
 
 .. automodule:: plotSCurveFitResults
