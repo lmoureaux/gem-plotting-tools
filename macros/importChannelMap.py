@@ -25,8 +25,11 @@ Mandatory arguments
 
 .. option:: -i,--input <FILE>
 
-    Specify the input file. It must be in a specific ``csv`` format; check the
-    dedicated section for details.
+    Specify the input file, in ``xlsx`` format.
+
+.. option:: -s,--sheet <SHEET NAME>
+
+    Specify the name of the sheet to import from the input file.
 
 .. option:: -o,--output <FILE>
 
@@ -35,41 +38,13 @@ Mandatory arguments
 Input format
 ------------
 
-The input file should be in ``csv`` format. It has to be created manually from
-the documentation provided by the electronics team, e.g. `this EDMS document
+The input file should be in ``xlsx`` format and be organized in the same way as
+`this EDMS document
 <https://edms.cern.ch/ui/#!master/navigator/document?P:1115513923:100178398:subDocs>`_.
-The procedure is as follows:
+Failure to conform to the format can result in undefined behaviour.
 
-1. Edit the ``xlsx`` file to contain only the required information:
-    1. Unmerge merged cells
-    2. Remove all metadata and drawings, except column headers in the row with
-       the hybrid positions
-    3. Make sure that there's no empty line
-    4. Remove the ``IN`` prefix from the "VFAT CHANNEL NUMBERS" column. In
-       LibreOffice, the easiest way is as follows:
-
-       * Open the search and replace dialog (``Ctrl+H``)
-       * Check the "Regular expressions" box (under "Other options")
-       * Enter ``IN([0-9]+)`` in the "Search" box
-       * Enter ``$1`` in the "Replace with" box
-       * Hit the "Replace all" button.
-
-   Your sheet should now look like this:
-
-    ==================================================  ====================  ======================================================  =========================
-    130 Pins PANASONIC CONNECTOR PIN OUTS AXK5SA3277YG  VFAT CHANNEL NUMBERS  Hybrid Positions 2,3,4,5,6,7,8,9,10,11, 12, 13, 14, 15  Hybrid Positions    00,01
-    ==================================================  ====================  ======================================================  =========================
-    3                                                   0                     0                                                       63
-    5                                                   1                     1                                                       62
-    7                                                   4                     2                                                       61
-    ==================================================  ====================  ======================================================  =========================
-
-2. Export the relevant sheet to ``csv``. In LibreOffice, this is done by using
-   the "Save As..." entry of the "File" menu while the sheet is selected, and
-   selecting the appropriate format.
-3. Check that the ``csv`` file corresponds to the sheet you exported, has the
-   required headers and no spurious columns. This can be done from within your
-   spreadsheet software.
+This tool imports one sheet at a time, specified using the :option:`--sheet`
+option.
 
 Exit codes
 ----------
@@ -85,6 +60,8 @@ if __name__ == '__main__':
     parser = OptionParser()
     parser.add_option('-i', '--input', type=str, dest='input',
                       help='Specify the input file', metavar='input')
+    parser.add_option('-s', '--sheet', type=str, dest='sheet',
+                      help='Specify the sheet in the input file', metavar='sheet')
     parser.add_option('-o', '--output', type=str, dest='output',
                       help='Specify the output file', metavar='output')
     (options, args) = parser.parse_args()
@@ -94,28 +71,33 @@ if __name__ == '__main__':
         import sys
         sys.exit(1)
 
+    if options.sheet is None:
+        print('Error: The -s option is required')
+        import sys
+        sys.exit(1)
+
     if options.output is None:
         print('Error: The -o option is required')
         import sys
         sys.exit(1)
 
     # Parse input file
-    headers = None
+    import openpyxl
+    xlsxfile = openpyxl.load_workbook(options.input, guess_types = True, data_only = True)
+    sheet = xlsxfile[options.sheet]
+
+    headers = [ cell.value for cell in sheet['A4:F4'][0] ]
+
     data = []
-    with open(options.input) as csvfile:
-        import csv
-        reader = csv.reader(csvfile)
-        firstRow = True
-        for row in reader:
-            if firstRow:
-                headers = row
-                firstRow = False
-            else:
-                for i in range(len(row)):
-                    row[i] = int(row[i])
-                data.append(row)
-            pass
-        pass
+    for row in sheet['A6:F9999']:
+        values = [ cell.value for cell in row ]
+        if values == [ None ]*len(values) :
+            # Skip empty lines
+            continue
+
+        # Convert eg 'IN12' to 12
+        values[1] = int(values[1][2:])
+        data.append(values)
 
     # Sanity checks: column headers
     import re
