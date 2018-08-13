@@ -33,7 +33,8 @@
 !setup/paths.sh
 
 # Don't ignore channel maps
-!mapping/channel-map-*.txt
+!mapping/longChannelMap_*.txt
+!mapping/shortChannelMap_*.txt
 
 # Don't ignore build config directory
 !config
