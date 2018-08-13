@@ -3,4 +3,3 @@ setuptools>25,<=38
 pip>8,<10.1
 sphinx
 sphinxcontrib-napoleon
-openpyxl>=2.5.5

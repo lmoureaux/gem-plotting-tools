@@ -9,4 +9,5 @@ root_numpy
 ## Version 0.8.0 isn't in the CHANGELOG
 tabulate>=0.4.4,<0.8; python_version == '2.6'
 tabulate>=0.4.4; python_version >= '2.7'
-openpyxl>=2.5.5
+openpyxl>=2.4,<2.5; python_version == '2.6'
+openpyxl>=2.4; python_version >= '2.7'
